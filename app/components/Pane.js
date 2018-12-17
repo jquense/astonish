@@ -1,41 +1,62 @@
 import React from 'react'
-import Layout from 'react-tackle-box/Layout'
+
+import { trimStart } from 'lodash'
 import { Tab, Nav } from 'react-bootstrap'
 import EditorTab from './EditorTab'
 import PaneBody from './PaneBody'
 
+import AstPane from './AstPane'
+import InputPane from './InputPane'
+
 import styled from 'astroturf'
+
+const TabComponents = {
+  input: InputPane,
+  ast: AstPane,
+}
+const Container = styled('div')`
+  width: 100%;
+  height: 100%;
+`
+
+const TabList = styled(Nav)`
+  height: 40px;
+`
+
 const TabPane = styled(Tab.Pane)`
   width: 100%;
   height: 100%;
+  position: absolute;
+  overflow: auto;
 `
 
 const propTypes = {}
 
 function Pane({ tabs, path }) {
-  console.log(tabs)
   return (
-    <Tab.Container defaultActiveKey={tabs[0]}>
-      <Layout direction="column" grow>
-        <Nav variant="tabs">
+    <Tab.Container defaultActiveKey={tabs[0]} transition={false}>
+      <Container>
+        <TabList variant="tabs">
           {tabs.map((tab, idx) => (
             <EditorTab
               key={tab}
               eventKey={tab}
-              path={`${path}.tabs[${idx}]`.trim()}
+              path={trimStart(`${path}.tabs[${idx}]`, '.')}
             >
               {tab}
             </EditorTab>
           ))}
-        </Nav>
+        </TabList>
         <PaneBody path={path}>
           {tabs.map(tab => (
             <TabPane eventKey={tab} key={tab}>
-              pane 1
+              {TabComponents[tab]
+                ? React.createElement(TabComponents[tab])
+                : tab}
             </TabPane>
           ))}
         </PaneBody>
-      </Layout>
+      </Container>
     </Tab.Container>
   )
 }

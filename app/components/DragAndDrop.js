@@ -5,7 +5,7 @@ import React, {
   useRef,
   useCallback,
 } from 'react'
-import useDebounce from '../utils/useDebounce'
+import useThrottle from '../utils/useThrottle'
 
 import { css } from 'astroturf'
 
@@ -44,6 +44,7 @@ export default function createDragAndDrop() {
     const dispatch = useContext(DispatchContext)
 
     return {
+      draggable: true,
       onDragStart: useCallback(event => {
         event.stopPropagation()
         event.dataTransfer.dropEffect = 'move'
@@ -60,17 +61,20 @@ export default function createDragAndDrop() {
     }
   }
 
-  function useDragTarget({ onDrop } = {}) {
+  function useDragTarget({ onDrop, canDrop } = {}) {
     const [isOver, setOver] = useState(false)
     const dispatch = useContext(DispatchContext)
     const { position, data } = useContext(SourceContext)
-    const debouncedDispatch = useDebounce(dispatch, 50)
+    const debouncedDispatch = useThrottle(dispatch, 50)
 
     return [
       isOver ? position : null,
       {
         onDrop: useCallback(
           event => {
+            if (canDrop && !canDrop({ data, position })) {
+              return event.preventDefault()
+            }
             event.target.classList.remove(styles.droppable)
             onDrop && onDrop(data, position)
             setOver(false)
@@ -115,13 +119,11 @@ export default function createDragAndDrop() {
     const [state, dispatch] = useReducer(sourceReducer, initialState)
 
     return (
-      <>
-        <DispatchContext.Provider value={dispatch}>
-          <SourceContext.Provider value={state}>
-            {children}
-          </SourceContext.Provider>
-        </DispatchContext.Provider>
-      </>
+      <DispatchContext.Provider value={dispatch}>
+        <SourceContext.Provider value={state}>
+          {children}
+        </SourceContext.Provider>
+      </DispatchContext.Provider>
     )
   }
 

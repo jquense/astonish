@@ -1,6 +1,11 @@
 const { app, BrowserWindow } = require('electron') // eslint-disable-line import/no-extraneous-dependencies
 const { chunksToLinesAsync } = require('@rauschma/stringio')
 
+const {
+  default: installExtension,
+  REACT_DEVELOPER_TOOLS,
+} = require('electron-devtools-installer')
+
 const isDev = require('electron-is-dev')
 const execa = require('execa')
 const onExit = require('signal-exit')
@@ -19,6 +24,8 @@ async function startDevServer(win) {
   })
 
   onExit((_, sig) => cp && cp.kill(sig))
+
+  installExtension(REACT_DEVELOPER_TOOLS)
 
   for await (const line of chunksToLinesAsync(cp.stdout)) {
     process.stdout.write(line)

@@ -1,0 +1,38 @@
+{
+  "name": "@astonish/parser-babel",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4Catalyzer/babel.git"
+  },
+  "author": "4Catalyzer",
+  "license": "MIT",
+  "scripts": {
+    "tdd": "jest --watch",
+    "test": "jest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "@astonish/ast-parser": "0.0.0",
+    "@babel/core": "^7.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "eslint": "^5.10.0",
+    "eslint-config-prettier": "^3.3.0",
+    "husky": "^1.2.1",
+    "jest": "^23.5.0",
+    "lerna": "^3.6.0",
+    "prettier": "^1.15.3"
+  }
+}

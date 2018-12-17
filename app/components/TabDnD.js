@@ -1,4 +1,4 @@
-import createDragAndDrop from '../DragAndDrop'
+import createDragAndDrop from './DragAndDrop'
 
 const {
   DragAndDropProvider,

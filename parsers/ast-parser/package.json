@@ -1,0 +1,31 @@
+{
+  "name": "@astonish/ast-parser",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4Catalyzer/ast-parser.git"
+  },
+  "author": "4Catalyzer",
+  "license": "MIT",
+  "scripts": {
+    "tdd": "jest --watch",
+    "test": "jest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "jest": "^23.5.0"
+  },
+  "dependencies": {
+    "common-tags": "^1.8.0",
+    "iter-tools": "^6.1.7"
+  }
+}

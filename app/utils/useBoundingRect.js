@@ -1,12 +1,20 @@
 import { useLayoutEffect, useState } from 'react'
+import { findDOMNode } from 'react-dom'
 
 export default function useDebounce(ref) {
   const [bounds, setBounds] = useState(null)
 
   useLayoutEffect(() => {
-    if (!ref.current) return
+    let current
+    try {
+      current = ref.current && findDOMNode(ref.current)
+    } catch (err) {
+      // ignore
+    }
 
-    const nextBounds = ref.current.getBoundingClientRect()
+    if (!current) return
+
+    const nextBounds = current.getBoundingClientRect()
     if (
       !bounds ||
       nextBounds.left !== bounds.left ||

@@ -1,16 +1,18 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useRef } from 'react'
 import cn from 'classnames'
-import useBoundingRect from '../../utils/useBoundingRect'
+import { Tab } from 'react-bootstrap'
+import useBoundingRect from '../utils/useBoundingRect'
+import { usePaneActions } from './Content'
 import { useDragTarget } from './TabDnD'
-import { usePaneActions } from '../Content'
 
 import styled, { css } from 'astroturf'
 
 const styles = css`
   .body {
-    height: 100%;
     width: 100%;
     position: relative;
+    height: calc(100% - 40px);
+    background-color: #eee;
   }
 `
 
@@ -51,11 +53,6 @@ const DropPad = styled('div')`
     height: 50%;
   }
 `
-const target = {
-  drop() {
-    return { name: 'Dustbin' }
-  },
-}
 
 const propTypes = {}
 
@@ -84,7 +81,7 @@ function PaneBody({ children, ...props }) {
   })
 
   return (
-    <div
+    <Tab.Content
       ref={ref}
       {...props}
       {...posSpec}
@@ -92,7 +89,7 @@ function PaneBody({ children, ...props }) {
     >
       {children}
       {position && <DropPad position={getPosition(position, bounds)} />}
-    </div>
+    </Tab.Content>
   )
 }
 

@@ -1,6 +1,14 @@
 {
   "extends": "jason/react",
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts", ".tsx"]
+      }
+    }
   }
 }

@@ -1,20 +1,17 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { Nav } from 'react-bootstrap'
 
 import { useDragSource } from './TabDnD'
 
 const propTypes = {}
 
-function EditorTab({ children, path }) {
+function EditorTab({ children, path, ...props }) {
   const dragProps = useDragSource({
-    getData: () => ({
-      path,
-    }),
+    getData: () => ({ path }),
   })
 
   return (
-    <Nav.Link draggable {...dragProps}>
+    <Nav.Link {...props} {...dragProps}>
       {children}
     </Nav.Link>
   )

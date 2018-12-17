@@ -1,0 +1,6 @@
+{
+  "useWorkspaces": true,
+  "npmClient": "yarn",
+  "packages": ["app", "parsers/*"],
+  "version": "0.0.0"
+}

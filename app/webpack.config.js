@@ -1,4 +1,5 @@
 const nodeExternals = require('webpack-node-externals')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 const path = require('path')
@@ -20,8 +21,9 @@ module.exports = (_, { mode }) => {
 
   return {
     mode,
+    devtool: 'module-source-map',
     entry: {
-      app: './app',
+      app: './index.js',
     },
 
     output: {
@@ -35,13 +37,13 @@ module.exports = (_, { mode }) => {
 
     module: {
       rules: [
-        rules.js({ envName: mode }),
+        { ...rules.js({ envName: mode }), test: /\.(j|t)sx?$/ },
         {
-          test: /\.js/,
+          test: /\.(j|t)sx?$/,
           use: [loaders.cssLiteral({ extension: '.module.scss' })],
         },
-        { oneOf: [rules.fastSass.modules(), rules.fastSass()] },
-        { oneOf: [rules.css.modules(), rules.css()] },
+        rules.fastSass(),
+        rules.css(),
         rules.images(),
         rules.fonts(),
       ],
@@ -58,10 +60,18 @@ module.exports = (_, { mode }) => {
       }),
     ],
     resolve: {
-      modules: ['node_modules', 'shared'],
+      extensions: ['.mjs', '.ts', '.tsx', '.js', '.json'],
     },
     plugins: [
       new MonacoWebpackPlugin(),
+      new ForkTsCheckerWebpackPlugin({
+        async: false,
+        tslint: false,
+        compilerOptions: {
+          noUnusedLocals: false,
+          noUnusedParameters: false,
+        },
+      }),
       plugins.html({
         template: path.resolve(__dirname, './assets/index.html'),
         // For some reason all paths are lost when using HtmlWebpackPlugin and

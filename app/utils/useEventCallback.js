@@ -1,11 +1,11 @@
-import { useEffect, useCallback, useRef } from 'react'
+import { useMutationEffect, useCallback, useRef } from 'react'
 
 export default function useEventCallback(fn, dependencies) {
   const ref = useRef(() => {
     throw new Error('Cannot call an event handler while rendering.')
   })
 
-  useEffect(
+  useMutationEffect(
     () => {
       ref.current = fn
     },
@@ -14,7 +14,9 @@ export default function useEventCallback(fn, dependencies) {
 
   return useCallback(
     (...args) => {
-      return ref.current(...args)
+      if (!ref.current) return
+
+      ref.current(...args)
     },
     [ref]
   )
