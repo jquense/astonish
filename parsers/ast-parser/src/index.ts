@@ -1,8 +1,32 @@
 const { stripIndent } = require('common-tags')
 const { entries, map, filter } = require('iter-tools')
 
-class Parser {
-  constructor({ parserOptions, mimeTypes, example, ignoredProperties }) {
+export interface ParserOptions {
+  example?: string
+  mimeTypes?: string[]
+  ignoredProperties?: Iterable<string>
+  parserOptions?: {}
+}
+
+export interface NodeProperties {
+  value: Node
+  key?: string
+  computed: boolean
+}
+
+class Parser<TNodeType = any> {
+  example: string
+  parserOptions?: {}
+
+  private mimeTypes?: string[]
+  private ignoredProperties: Set<string>
+
+  constructor({
+    parserOptions,
+    mimeTypes,
+    example,
+    ignoredProperties,
+  }: ParserOptions = {}) {
     this.mimeTypes = mimeTypes
     this.parserOptions = parserOptions
     this.ignoredProperties = new Set(ignoredProperties)
@@ -26,11 +50,11 @@ class Parser {
     throw new Error('Not implemented')
   }
 
-  updateOptions(nextOptions) {
+  updateOptions(nextOptions: {}) {
     this.parserOptions = nextOptions
   }
 
-  getNodeName(node) {
+  getNodeName(node: any) {
     switch (typeof node.type) {
       case 'string':
         return node.type
@@ -39,7 +63,7 @@ class Parser {
     }
   }
 
-  *propertiesForNode(node) {
+  *propertiesForNode(node: TNodeType | TNodeType[]): Iterable<NodeProperties> {
     const isArray = Array.isArray(node)
 
     for (let [key, value] of entries(node)) {

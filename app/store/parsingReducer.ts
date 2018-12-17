@@ -28,5 +28,6 @@ export default (state: ParsingState = initial, action: ParsingAction) => {
     case t(updateParserOptions):
       return { ...state, options: action.payload.options }
   }
+  
   return state
 }

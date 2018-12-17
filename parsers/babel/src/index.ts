@@ -1,6 +1,6 @@
-const { parseAsync } = require('@babel/core')
-const Parser = require('@astonish/ast-parser')
-const { stripIndent } = require('common-tags')
+import { parseAsync } from '@babel/core'
+import Parser from '@astonish/ast-parser'
+import { stripIndent } from 'common-tags'
 
 const defaultOptions = {
   allowImportExportEverywhere: true,

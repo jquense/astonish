@@ -1,7 +1,7 @@
 {
   "name": "@astonish/ast-parser",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/4Catalyzer/ast-parser.git"
@@ -10,6 +10,7 @@
   "license": "MIT",
   "scripts": {
     "tdd": "jest --watch",
+    "build": "babel src --out-dir lib --root-mode upward --delete-dir-on-start --extensions .ts,.tsx",
     "test": "jest"
   },
   "publishConfig": {
@@ -22,6 +23,7 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.0",
     "jest": "^23.5.0"
   },
   "dependencies": {

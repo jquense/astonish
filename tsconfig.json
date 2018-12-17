@@ -1,4 +1,8 @@
 {
-  "extends": "./tsconfig.base.json",
-  "include": ["typings/*", "app/**/*"]
+  "files": [],
+  "references": [
+    { "path": "app" },
+    { "path": "parsers/ast-parser" },
+    { "path": "parsers/babel" }
+  ]
 }

@@ -10,6 +10,7 @@
   "license": "MIT",
   "scripts": {
     "tdd": "jest --watch",
+    "build": "babel src --out-dir lib --root-mode upward --delete-dir-on-start --extensions .ts,.tsx",
     "test": "jest"
   },
   "publishConfig": {
