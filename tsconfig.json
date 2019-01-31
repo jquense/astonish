@@ -1,8 +1,0 @@
-{
-  "files": [],
-  "references": [
-    { "path": "app" },
-    { "path": "parsers/ast-parser" },
-    { "path": "parsers/babel" }
-  ]
-}

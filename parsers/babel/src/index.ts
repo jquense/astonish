@@ -1,5 +1,5 @@
 import { parseAsync } from '@babel/core'
-import Parser from '@astonish/ast-parser'
+import Parser, { NodeRange } from '@astonish/ast-parser'
 import { stripIndent } from 'common-tags'
 
 const defaultOptions = {
@@ -35,7 +35,13 @@ const defaultOptions = {
   ],
 }
 
-class BabelParser extends Parser {
+export interface BabelNode {
+  type: string | { label: string }
+  start?: number
+  end?: number
+}
+
+class BabelParser extends Parser<BabelNode> {
   constructor(options = defaultOptions) {
     super({
       parserOptions: options,
@@ -67,7 +73,7 @@ class BabelParser extends Parser {
 
   async init() {}
 
-  expandedByDefault(node, key) {
+  expandedByDefault(node: BabelNode, key: string) {
     return (
       node.type === 'File' ||
       node.type === 'Program' ||
@@ -78,7 +84,7 @@ class BabelParser extends Parser {
     )
   }
 
-  getNodeName(node) {
+  getNodeName(node: BabelNode) {
     switch (typeof node.type) {
       case 'string':
         return node.type
@@ -87,19 +93,16 @@ class BabelParser extends Parser {
     }
   }
 
-  getNodeRange(node) {
+  getNodeRange(node: BabelNode): NodeRange | null {
     if (typeof node.start === 'number') {
       return [node.start, node.end]
     }
+    return null
   }
 
-  parse(input) {
+  parse(input: string) {
     return parseAsync(input, { parserOpts: this.parserOptions })
-  }
-
-  async transform() {
-    throw new Error('Not implemented')
   }
 }
 
-module.exports = new BabelParser()
+export default new BabelParser()

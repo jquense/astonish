@@ -1,5 +1,4 @@
 import * as Actions from './actions'
-import { Dispatch } from './store/createStore'
 import { Thunk } from './store'
 
 export const updateInputCode = (input: string): Thunk => async (

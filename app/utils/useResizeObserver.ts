@@ -3,7 +3,7 @@ import { useRef, useEffect, RefObject } from 'react'
 type Handler = (rect: DOMRect) => void
 
 const targetMap = new WeakMap<Element, Handler>()
-const observer = new ResizeObserver(entries => {
+const observer = new window.ResizeObserver(entries => {
   entries.forEach(entry => {
     targetMap.get(entry.target)!(entry.contentRect as DOMRect)
   })

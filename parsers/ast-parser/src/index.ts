@@ -1,5 +1,5 @@
-const { stripIndent } = require('common-tags')
-const { entries, map, filter } = require('iter-tools')
+import { stripIndent } from 'common-tags'
+import { entries } from 'iter-tools'
 
 export interface ParserOptions {
   example?: string
@@ -9,25 +9,24 @@ export interface ParserOptions {
 }
 
 export interface NodeProperties {
-  value: Node
+  value: any
   key?: string
   computed: boolean
 }
 
-class Parser<TNodeType = any> {
-  example: string
-  parserOptions?: {}
+export type NodeRange = [number, number]
 
-  private mimeTypes?: string[]
+abstract class Parser<TNodeType = any> {
+  example: string
+  public parserOptions?: {}
+
   private ignoredProperties: Set<string>
 
   constructor({
     parserOptions,
-    mimeTypes,
     example,
     ignoredProperties,
   }: ParserOptions = {}) {
-    this.mimeTypes = mimeTypes
     this.parserOptions = parserOptions
     this.ignoredProperties = new Set(ignoredProperties)
 
@@ -39,38 +38,33 @@ class Parser<TNodeType = any> {
         }
       `
   }
-  async init() {
-    throw new Error('Not implemented')
+
+  abstract init(): Promise<void>
+
+  abstract parse(input: string): Promise<any>
+
+  abstract getNodeName(node: TNodeType): string
+
+  abstract getNodeRange(node: TNodeType | TNodeType[]): NodeRange | null
+
+  expandedByDefault(_node: TNodeType, _key: string): boolean {
+    return false
   }
 
-  async parse() {
-    throw new Error('Not implemented')
-  }
-  async transform() {
-    throw new Error('Not implemented')
-  }
+  transform?(input: string): Promise<string>
 
   updateOptions(nextOptions: {}) {
     this.parserOptions = nextOptions
   }
 
-  getNodeName(node: any) {
-    switch (typeof node.type) {
-      case 'string':
-        return node.type
-      case 'object':
-        return `Token (${node.type.label})`
-    }
-  }
-
   *propertiesForNode(node: TNodeType | TNodeType[]): Iterable<NodeProperties> {
     const isArray = Array.isArray(node)
 
-    for (let [key, value] of entries(node)) {
+    for (let [key, value] of entries<any>(node as any)) {
       if (this.ignoredProperties.has(key)) continue
       yield { value, key: isArray ? undefined : key, computed: false }
     }
   }
 }
 
-module.exports = Parser
+export default Parser

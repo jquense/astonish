@@ -1,10 +1,20 @@
+const fs = require('fs')
 const nodeExternals = require('webpack-node-externals')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-
 const path = require('path')
 
+const root = path.resolve(__dirname, '..')
+const pkg = require('../package.json')
+
 const { rules, plugins, loaders } = require('webpack-atoms')
+
+const parserAliases = {}
+fs.readdirSync(root + '/parsers')
+  .filter(p => fs.statSync(`${root}/parsers/${p}`).isDirectory())
+  .forEach(dir => {
+    parserAliases[`@astonish/${dir}`] = `${root}/parsers/${dir}/src`
+  })
 
 const devServer = {
   port: 8000,
@@ -60,6 +70,7 @@ module.exports = (_, { mode }) => {
       }),
     ],
     resolve: {
+      alias: parserAliases,
       extensions: ['.mjs', '.ts', '.tsx', '.js', '.json'],
     },
     plugins: [
@@ -70,6 +81,8 @@ module.exports = (_, { mode }) => {
         compilerOptions: {
           noUnusedLocals: false,
           noUnusedParameters: false,
+          baseUrl: '../',
+          paths: pkg['workspace-sources'],
         },
       }),
       plugins.html({

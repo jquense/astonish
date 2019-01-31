@@ -4,7 +4,6 @@ import * as monaco from 'monaco-editor'
 import useResizeObserver from '../utils/useResizeObserver'
 
 import { useStoreState, useStoreDispatch } from '../store'
-import { Range } from '../types'
 import * as React from 'react'
 import { editorCursorChange } from '../actions'
 

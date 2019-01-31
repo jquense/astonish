@@ -13,7 +13,6 @@ import paneReducer, {
 import parsingReducer, { ParsingState, ParsingAction } from './parsingReducer'
 import transformingReducer from './transformingReducer'
 import { ActionType } from 'typesafe-actions'
-import { Parser } from '../types'
 
 export type Thunk<R = void> = (
   dispatch: Dispatch,
@@ -56,22 +55,20 @@ const { Store, useStoreDispatch, useBoundActions, useStoreState } = createStore<
   RootAction
 >(reducers, middleware)
 
-const readData = createResource(
-  async (): Promise<Partial<RootState>> => {
-    const { repo } = await initData()
-    const parser: Parser = await getParser(repo.parserModule)
+const readData = createResource<Partial<RootState>, void>(async () => {
+  const { repo } = await initData()
+  const parser = await getParser(repo.parserModule)
 
-    return {
-      parsing: {
-        input: repo.input,
-        parserModule: repo.parserModule,
-        options: parser.parserOptions,
-        ast: await parser.parse(repo.input),
-        parser,
-      },
-    }
+  return {
+    parsing: {
+      input: repo.input,
+      parserModule: repo.parserModule,
+      options: parser.parserOptions,
+      ast: await parser.parse(repo.input),
+      parser,
+    },
   }
-)
+})
 
 const Provider = ({ children }: { children: React.ReactNode }) => (
   <React.Suspense fallback="loading">

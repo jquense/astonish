@@ -4,24 +4,21 @@ import styled from 'astroturf'
 
 import { useStoreState, useStoreDispatch } from '../store'
 import { hoverNode, leaveNode } from '../actions'
+import Parser, { NodeRange } from '@astonish/ast-parser'
 import Tree from './Tree'
 import CompactValue from './CompactValue'
 
-const Container = styled.div`
+const Container = styled('div')`
   display: contents;
   font-family: monospace;
 `
 
-const Ul = styled.ul`
+const Ul = styled('ul')`
   list-style: none;
   padding-left: 2em;
 `
 
-function inRange(range, pos) {
-  return pos >= range[0] && pos <= range[1]
-}
-
-function getRangeFromValue(value, parser) {
+function getRangeFromValue(value, parser: Parser): NodeRange {
   let range = value && parser.getNodeRange(value)
   if (range) return range
 
@@ -52,8 +49,17 @@ function useNodeHighlight(value, parser) {
   }
 }
 
-function Element({ item, parser, isRoot }) {
-  let { value, key, computed } = item
+type Props = {
+  isRoot?: boolean
+  parser: Parser
+  item: {
+    key?: string
+    value: {}
+  }
+}
+
+function Element({ item, parser, isRoot }: Props) {
+  let { value, key } = item
 
   const isComplex = value && typeof value === 'object'
   const hoverHandlers = useNodeHighlight(value, parser)
@@ -82,7 +88,7 @@ function Element({ item, parser, isRoot }) {
     )
     const children = Array.from(
       Iter.map(
-        child => <Element parser={parser} item={child} parent={item} />,
+        child => <Element parser={parser} item={child as any} />,
         parser.propertiesForNode(value)
       )
     )

@@ -40,7 +40,7 @@ function Header(props: any) {
       <Nav>
         <Nav.Link onClick={() => setShow(true)}>Edit</Nav.Link>
       </Nav>
-      <OptionsModal show={show} onHide={() => setShow(false)} language="json" />
+      <OptionsModal show={show} onHide={() => setShow(false)} />
     </Navbar>
   )
 }

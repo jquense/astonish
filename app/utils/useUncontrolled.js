@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef } from 'react'
 import * as Utils from 'uncontrollable/lib/utils'
 
 export default function useUncontrolled(props, fieldName, handlerName) {

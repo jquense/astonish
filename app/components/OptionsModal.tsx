@@ -38,6 +38,7 @@ function OptionsModal({ show, onHide }: Props) {
       <Modal.Body style={{ height: 'calc(90vh - 71px)' }}>
         {show && (
           <Editor
+            language="json"
             defaultValue={JSON.stringify(options, null, 2)}
             onChange={onChange}
           />

@@ -1,14 +1,16 @@
 {
-  "extends": "jason/react",
+  "extends": ["jason/react", "4catalyzer-typescript"],
   "env": {
     "browser": true,
     "es6": true
   },
   "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".ts", ".tsx"]
-      }
-    }
+    "import/resolver": "workspaces"
+  },
+  "rules": {
+    "import/named": "off",
+    "import/no-unresolved": "off",
+    "import/default": "off",
+    "import/namespace": "off"
   }
 }
